@@ -3,213 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Minecraft Visiting Card</title>
+<title>Block World</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-body {
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at center, #183b16 0%, #071007 35%, #020402 80%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-    color: white;
+body{
+  overflow:hidden;
+  font-family:monospace;
+  background:#071b12;
+  color:white;
 }
 
-.title {
-    color: #9cff00;
-    font-size: clamp(22px, 5vw, 38px);
-    font-weight: bold;
-    text-shadow:
-        0 0 8px #5cff00,
-        0 0 20px #5cff00;
-    margin-bottom: 8px;
+.scene{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(#071d35 0%,#164d61 48%,#67b35b 49%,#28753b 100%);
 }
 
-.subtitle {
-    color: #c9d8c9;
-    font-size: 14px;
-    margin-bottom: 25px;
+/* SUN */
+.sun{
+  position:absolute;
+  width:90px;
+  height:90px;
+  background:#ffe66d;
+  box-shadow:0 0 45px #ffe66d;
+  right:12%;
+  top:10%;
 }
 
-/* CARD AREA */
-
-.card-container {
-    width: min(90vw, 700px);
-    aspect-ratio: 89 / 51;
-    perspective: 1500px;
+/* CLOUDS */
+.cloud{
+  position:absolute;
+  width:150px;
+  height:35px;
+  background:#dff7ff;
+  opacity:.8;
+  animation:cloud 25s linear infinite;
 }
 
-.card {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.85s cubic-bezier(.2,.75,.2,1);
-    cursor: pointer;
+.cloud:before,
+.cloud:after{
+  content:"";
+  position:absolute;
+  background:#dff7ff;
 }
 
-.card.flipped {
-    transform: rotateY(180deg);
+.cloud:before{
+  width:55px;
+  height:55px;
+  left:25px;
+  top:-25px;
 }
 
-/* FRONT + BACK */
-
-.card-face {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-
-    border-radius: 10px;
-    overflow: hidden;
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    border: 2px solid #9cff00;
-
-    box-shadow:
-        0 0 5px #9cff00,
-        0 0 20px #5cff00,
-        0 20px 50px rgba(0,0,0,.8);
-
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+.cloud:after{
+  width:70px;
+  height:70px;
+  right:20px;
+  top:-35px;
 }
 
-/* FRONT */
+.cloud.one{top:18%;left:-180px;}
+.cloud.two{top:30%;left:-400px;animation-delay:8s;}
 
-.front {
-    background-image: url("front.png");
+@keyframes cloud{
+  to{transform:translateX(130vw);}
 }
 
-/* BACK */
-
-.back {
-    background-image: url("back.png");
-    transform: rotateY(180deg);
+/* MOUNTAINS */
+.mountain{
+  position:absolute;
+  bottom:32%;
+  width:0;
+  height:0;
+  border-left:180px solid transparent;
+  border-right:180px solid transparent;
+  border-bottom:300px solid #315d46;
 }
 
-/* SHINE EFFECT */
+.m1{left:5%;}
+.m2{left:38%;transform:scale(1.3);}
+.m3{right:-5%;transform:scale(.9);}
 
-.card-face::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            120deg,
-            rgba(255,255,255,0.10),
-            transparent 25%,
-            transparent 70%,
-            rgba(255,255,255,0.04)
-        );
-
-    pointer-events: none;
+/* GROUND */
+.ground{
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:35%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #277b38 0 50px,
+      #226d31 50px 100px
+    );
+  border-top:12px solid #68452b;
 }
 
-/* BUTTON */
-
-.flip-button {
-    margin-top: 22px;
-
-    padding: 10px 20px;
-
-    border: 1px solid #9cff00;
-    border-radius: 30px;
-
-    background: #071207;
-    color: #baff65;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    box-shadow:
-        0 0 10px #5cff0044,
-        inset 0 0 10px #5cff0022;
-
-    text-shadow: 0 0 8px #9cff00;
+.ground:before{
+  content:"";
+  position:absolute;
+  top:0;
+  width:100%;
+  height:22px;
+  background:#4cae43;
 }
 
-/* MOBILE */
-
-@media(max-width:600px) {
-
-    body {
-        padding: 15px;
-    }
-
-    .subtitle {
-        margin-bottom: 18px;
-    }
-
-    .card-container {
-        width: 94vw;
-    }
-
-    .card-face {
-        border-radius: 7px;
-    }
-
-    .flip-button {
-        font-size: 12px;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="title">
-    ⛏️ MINECRAFT CARD
-</div>
-
-<div class="subtitle">
-    Tap the card to flip
-</div>
-
-<div class="card-container">
-
-    <div class="card" id="card">
-
-        <!-- FRONT -->
-        <div class="card-face front"></div>
-
-        <!-- BACK -->
-        <div class="card-face back"></div>
-
-    </div>
-
-</div>
-
-<div class="flip-button">
-    TAP / CLICK TO FLIP ↻
-</div>
-
-
-<script>
-
-const card = document.getElementById("card");
-
-card.addEventListener("click", function () {
-    card.classList.toggle("flipped");
-});
-
-</script>
-
-</body>
-</html>
+/* BLOCKS */
+.block{
+  position:absolute;
+  width:65px;
+  height:65px;
+  background:#76502e;
+  border:5px solid #4c321d;
+  box-shadow:inset 0 10px #8f653c
